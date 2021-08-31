@@ -1,0 +1,91 @@
+
+未完了のTODOを管理するストレージ(A)を用意
+let incompleteTodoStorage = ["TODOです1","TODOです2","TODOです３"];
+完了のTODOを管理するストレージ(B)を用意
+let completeTodoStorage = ["TODOでした１","TODOでした２"];
+setItemの値も設定しておくことが必要
+
+初期表示用に値を格納しておく。
+初期表示時にA、Bからデータ取得して画面に表示
+
+未完了のTODOエリアに表示するのはAにあるデータ
+完了のTODOエリアに表示するのはBにあるデータ
+
+①ストレージのデータを取得して、画面へ表示する関数の作成
+ document.addEventListener("DOMContentLoaded, renderTodo();)
+　renderTodo:初期表示用の関数　
+
+　completelistが何個あるのか document.getElementsByClassName("incompletelist")[0];
+　incompletelistが何個あるのか document.getElementsByClassName("completelist")[0];
+
+　各クラス名を持つ要素があれば表示するという関数になる
+
+
+　incompleteTodoStorage：for - of incompleteTodoStorage
+　//liのテキストを取り出す必要あり
+　　const incompleteListItem = document.createElement("li");
+　　const completeButton = document.createElement("button");
+　　const deleteButton = document.createElement("button");　
+　　completeButton.addEventListener("click", ()=> completeFunc(completeButton))
+　　deleteButton.addEventListener("click", ()=> deleteFunc(deleteButton))
+
+　completeTodoStorage:for - of completeTodoStorage
+
+ const completeListItem = document.createElement("li");
+ const backButton = document.createElement("button");
+ backButton.addEventListener("click", ()=> backFunc(backButton))
+
+　入力値をストレージへの保存する処理のみ考えれば良い
+　保存した後に　再読み込みを走らせれば未完了のリストに表示される
+　
+　②ストレージデータを操作する関数の作成
+　　作成が必要な関数 どの要素を削除するかの基準：押されたボタンに一番近いTodoを指定する
+ addTodoFunc：追加ボタンを押下→Aへ該当データを追加→Aからデータを再取得
+ completeTodoFunc：完了ボタン押下→Aから該当データを削除→→Bに該当データを追加→AとBからデータを再取得
+ deleteTodoFunc：削除ボタン押下→Aから該当データを削除→Aからデータを再取得 
+ backTodoFunc：戻すボタン押下→Bから該当データを削除→Aに該当データを追加→AとBからデータを再取得
+
+ ***上記いずれも最終的にAとBからデータを取得して表示することになるので関数内はストレージの操作のみで終わらせる***　
+ 　→　最終的にrenderTodoを実行する形なので、各関数で実行するのはストレージへのデータの追加、更新、削除になるはず
+
+
+indexの紐付け方は理解できた
+foreachでindexの値を取り出して関数にindexの値を引き渡す
+
+datasetの使い方
+ https://into-the-program.com/dataset/
+ indexの値を、data-indexの中に格納する処理
+ 
+ document.getelementById("incomplete-list").datasetIndex = "1";
+
+ボタンが押されたときの処理
+ ボタンの親要素を取得して、格納されているdataindexの値を取り出す
+　　取り出された値を数字へ変更して変数へ格納
+　　配列から変数の値を１つspliceする変数を格納する
+
+
+const showincompletetask = (task) => {
+  // 作成する要素
+  const div = document.createElement("div");
+  div.className = "list-row";
+  const listItem = document.createElement("li");
+  listItem.datasetIndex = index;
+  listItem.innerText = task;
+  // console.log(task);
+  const completeButton = document.createElement("button");
+  completeButton.innerText = "完了";
+  //completeButtonが押されたときの関数completeButtonFunc
+  completeButton.addEventListener("click", () => completeButtonFunc());
+  const deleteButton = document.createElement("button");
+  deleteButton.innerText = "削除";
+  // deleteButtonが押されたときの関数
+  deleteButton.addEventListener("click", () => deleteButtonFunc());
+
+  //　追加する場所を指定して必要な要素を追加する
+  div.appendChild(listItem);
+  div.appendChild(completeButton);
+  div.appendChild(deleteButton);
+  document.getElementById("incomplete-list").appendChild(div);
+};
+
+completeButton.parentNode.document.dataset.index
